@@ -1,0 +1,144 @@
+#include <iostream>
+#include <iomanip>
+#include <cctype>
+using namespace std;
+
+// Function declarations
+void orderInventory(int& l, int& m, int& s);
+void fillOrder(int& l, int& m, int& s, int& o);
+void printInventory(int l, int m, int s);
+double getShippingCost(int pounds);
+
+int main() {
+    int large = 1500;
+    int medium = 1200;
+    int small = 7000;
+    int orderNum = 1;
+    char choice;
+
+    do {
+        cout << "\nEnter your choice:  ";
+        cin >> choice;
+
+        switch (toupper(choice)) {
+            case 'O':
+                orderInventory(large, medium, small);
+                break;
+            case 'F':
+                fillOrder(large, medium, small, orderNum);
+                break;
+            case 'P':
+                printInventory(large, medium, small);
+                break;
+            case 'E':
+                cout << "Thank you for using my program!" << endl;
+                break;
+            default:
+                cout << "WARNING: " << choice << " is an invalid choice. Please try again." << endl;
+        }
+
+    } while (toupper(choice) != 'E');
+
+    return 0;
+}
+
+// Order Inventory
+void orderInventory(int& l, int& m, int& s) {
+    char type;
+    int amount;
+    cout << "Enter amount to order: ";
+    cin >> amount;
+    cout << "Enter type of bar (L/M/S): ";
+    cin >> type;
+    type = toupper(type);
+
+    switch (type) {
+        case 'L':
+            l += amount;
+            cout << "An additional " << amount << " L bars ordered. New total of L bars = " << l << endl;
+            break;
+        case 'M':
+            m += amount;
+            cout << "An additional " << amount << " M bars ordered. New total of M bars = " << m << endl;
+            break;
+        case 'S':
+            s += amount;
+            cout << "An additional " << amount << " S bars ordered. New total of S bars = " << s << endl;
+            break;
+        default:
+            cout << "WARNING: " << type << " is an invalid type. Command ignored." << endl;
+    }
+}
+
+// Fill Order
+void fillOrder(int& l, int& m, int& s, int& o) {
+    int pounds;
+    cout << "Enter number of pounds to order: ";
+    cin >> pounds;
+
+    int l_needed = min(pounds / 5, l);
+    int remaining = pounds - l_needed * 5;
+
+    int m_needed = min(remaining / 3, m);
+    remaining -= m_needed * 3;
+
+    int s_needed = min(remaining, s);
+    remaining -= s_needed;
+
+    if (remaining > 0) {
+        cout << "WARNING:  Unable to fill order of " << pounds << " pounds. We are " << remaining << " pounds short. We are sorry for the inconvenience." << endl;
+        return;
+    }
+
+    // Prices
+    double l_price = 41.25;
+    double m_price = 25.80;
+    double s_price = 13.50;
+
+    // Totals
+    double lTot = l_needed * l_price;
+    double mTot = m_needed * m_price;
+    double sTot = s_needed * s_price;
+    double subTotal = lTot + mTot + sTot;
+    double tax = subTotal * 0.072;
+    int totalWeight = l_needed * 5 + m_needed * 3 + s_needed;
+    double shipping = getShippingCost(totalWeight);
+    double totalCost = subTotal + tax + shipping;
+
+    // Print receipt
+    cout << fixed << setprecision(2);
+    cout << setw(10) << "Chocolate Order #" << o << endl;
+    cout << "Large Bars:  " << setw(4) << l_needed << setw(9) << l_needed * 5 << setw(12) << lTot << endl;
+    cout << "Medium Bars: " << setw(4) << m_needed << setw(9) << m_needed * 3 << setw(12) << mTot << endl;
+    cout << "Small Bars:  " << setw(4) << s_needed << setw(9) << s_needed << setw(12) << sTot << endl;
+    cout << "Sub Total:   " << setw(13) << totalWeight << setw(12) << subTotal << endl;
+    cout << "\nTax Total:   " << setw(25) << tax << endl;
+    cout << "Shipping:    " << setw(25) << shipping << endl;
+    cout << "Total Cost:  " << setw(25) << totalCost << endl << endl << endl;
+
+    // Update inventory
+    l -= l_needed;
+    m -= m_needed;
+    s -= s_needed;
+    o++;
+}
+
+// Print Inventory
+void printInventory(int l, int m, int s) {
+    cout << "Current Inventory:" << endl;
+    cout << "Large Bars:  " << setw(4) << l << endl;
+    cout << "Medium Bars: " << setw(4) << m << endl;
+    cout << "Small Bars:  " << setw(4) << s << endl;
+}
+
+// Shipping Cost Calculator
+double getShippingCost(int pounds) {
+    if (pounds <= 10)
+        return 8.25;
+    else if (pounds <= 20)
+        return 12.75;
+    else if (pounds <= 50)
+        return 15.25;
+    else
+        return 19.75;
+}

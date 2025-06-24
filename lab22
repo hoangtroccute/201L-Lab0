@@ -15,8 +15,18 @@ void orderInventory(int& l, int& m, int& s);
 void fillOrder(int& l, int& m, int& s, int& orderNum);
 void printInventory(int l, int m, int s);
 double getShippingCost(int pounds);
+void displayMenu();
 
 // Function Definitions
+
+void displayMenu() {
+    cout << "\n===== CHOCOLATE FACTORY MENU =====\n";
+    cout << "O :  Order inventory (add more bars to stock)\n";
+    cout << "F :  Fill a customer order\n";
+    cout << "P :  Print current inventory\n";
+    cout << "E :  Exit the program\n";
+    cout << "==================================\n";
+}
 
 void orderInventory(int& l, int& m, int& s) {
     int amount;
@@ -99,7 +109,7 @@ void fillOrder(int& l, int& m, int& s, int& o) {
 }
 
 void printInventory(int l, int m, int s) {
-    cout << "\nInventory:\n";
+    cout << "\nCurrent Inventory:\n";
     cout << "Large Bars:  " << setw(4) << l << endl;
     cout << "Medium Bars: " << setw(4) << m << endl;
     cout << "Small Bars:  " << setw(4) << s << endl;
@@ -119,6 +129,7 @@ int main() {
     char choice;
 
     do {
+        displayMenu();
         cout << "\nEnter your choice:  ";
         cin >> choice;
         choice = toupper(choice);

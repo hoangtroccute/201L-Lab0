@@ -16,39 +16,8 @@ void fillOrder(int& l, int& m, int& s, int& orderNum);
 void printInventory(int l, int m, int s);
 double getShippingCost(int pounds);
 
-int main() {
-    int large = 1500, medium = 1200, small = 7000;
-    int orderNum = 1;
-    char choice;
+// Function Definitions
 
-    do {
-        cout << "\nEnter your choice:  ";
-        cin >> choice;
-        choice = toupper(choice);
-
-        switch (choice) {
-            case 'O':
-                orderInventory(large, medium, small);
-                break;
-            case 'F':
-                fillOrder(large, medium, small, orderNum);
-                break;
-            case 'P':
-                printInventory(large, medium, small);
-                break;
-            case 'E':
-                cout << "Thank you for using my program!\n";
-                break;
-            default:
-                cout << "WARNING: " << choice << " is an invalid choice. Please try again.\n";
-        }
-
-    } while (choice != 'E');
-
-    return 0;
-}
-
-// Order Inventory
 void orderInventory(int& l, int& m, int& s) {
     int amount;
     char type;
@@ -79,7 +48,6 @@ void orderInventory(int& l, int& m, int& s) {
     }
 }
 
-// Fill Order
 void fillOrder(int& l, int& m, int& s, int& o) {
     int weight;
     cout << "Enter number of pounds to order: ";
@@ -92,7 +60,6 @@ void fillOrder(int& l, int& m, int& s, int& o) {
         return;
     }
 
-    // Determine number of bars to use
     int useL = min(weight / 5, l);
     weight -= useL * 5;
 
@@ -107,7 +74,6 @@ void fillOrder(int& l, int& m, int& s, int& o) {
         return;
     }
 
-    // Compute costs
     double largeTot = useL * PRICE_LARGE;
     double mediumTot = useM * PRICE_MEDIUM;
     double smallTot = useS * PRICE_SMALL;
@@ -116,7 +82,6 @@ void fillOrder(int& l, int& m, int& s, int& o) {
     double shipping = getShippingCost(useL * 5 + useM * 3 + useS);
     double totalCost2 = totalCost1 + tax + shipping;
 
-    // Print receipt
     cout << fixed << setprecision(2);
     cout << "\nChocolate Order #" << o << endl;
     cout << "Large Bars:  " << setw(4) << useL << setw(9) << useL * 5 << setw(12) << largeTot << endl;
@@ -127,14 +92,12 @@ void fillOrder(int& l, int& m, int& s, int& o) {
     cout << "Shipping:    " << setw(25) << shipping << endl;
     cout << "Total Cost:  " << setw(25) << totalCost2 << endl << endl << endl;
 
-    // Update inventory and order number
     l -= useL;
     m -= useM;
     s -= useS;
     o++;
 }
 
-// Print Inventory
 void printInventory(int l, int m, int s) {
     cout << "\nInventory:\n";
     cout << "Large Bars:  " << setw(4) << l << endl;
@@ -142,10 +105,42 @@ void printInventory(int l, int m, int s) {
     cout << "Small Bars:  " << setw(4) << s << endl;
 }
 
-// Shipping Cost
 double getShippingCost(int pounds) {
     if (pounds <= 10) return 8.25;
     else if (pounds <= 20) return 12.75;
     else if (pounds <= 50) return 15.25;
     else return 19.75;
+}
+
+// Main Function
+int main() {
+    int large = 1500, medium = 1200, small = 7000;
+    int orderNum = 1;
+    char choice;
+
+    do {
+        cout << "\nEnter your choice:  ";
+        cin >> choice;
+        choice = toupper(choice);
+
+        switch (choice) {
+            case 'O':
+                orderInventory(large, medium, small);
+                break;
+            case 'F':
+                fillOrder(large, medium, small, orderNum);
+                break;
+            case 'P':
+                printInventory(large, medium, small);
+                break;
+            case 'E':
+                cout << "Thank you for using my program!\n";
+                break;
+            default:
+                cout << "WARNING: " << choice << " is an invalid choice. Please try again.\n";
+        }
+
+    } while (choice != 'E');
+
+    return 0;
 }
